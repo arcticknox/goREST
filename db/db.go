@@ -5,6 +5,7 @@ import (
 	"goREST/models"
 	"goREST/utils"
 	"log"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -28,6 +29,19 @@ func InitDB(dbName string) {
 	if err != nil {
 		log.Panic("DB Connect failed.")
 	}
+
+	// Connection pool settings
+	sqlDB, err := DBConn.DB()
+	if err != nil {
+		log.Panic("DB Connect failed.")
+	}
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxIdleConns(10)
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetMaxOpenConns(100)
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
 	log.Println("DB Connected.")
 	DBConn.AutoMigrate(&models.Item{})
 }
