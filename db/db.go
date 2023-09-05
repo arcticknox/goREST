@@ -43,5 +43,5 @@ func InitDB(dbName string) {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	log.Println("DB Connected.")
-	DBConn.AutoMigrate(&models.Item{})
+	DBConn.AutoMigrate(&models.Item{}, &models.User{})
 }
